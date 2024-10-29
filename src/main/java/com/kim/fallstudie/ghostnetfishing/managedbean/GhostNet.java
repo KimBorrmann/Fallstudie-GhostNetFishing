@@ -28,6 +28,11 @@ public class GhostNet {
      * Creates a new instance of Netz
      */
     public GhostNet() {
+        this.id = 10;
+        this.location = null;
+        this.size = null;
+        this.status = null;
+        this.reserved = null;
     }
 
     public GhostNet(int id, LatLng location, Size size) {

@@ -6,6 +6,7 @@ package com.kim.fallstudie.ghostnetfishing.managedbean;
 
 import com.kim.fallstudie.ghostnetfishing.enums.Size;
 import com.kim.fallstudie.ghostnetfishing.enums.Status;
+import com.kim.fallstudie.ghostnetfishing.models.User;
 import jakarta.inject.Named;
 import jakarta.enterprise.context.ApplicationScoped;
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class Webapp {
     
     protected List<GhostNet> reportedNets = new ArrayList<>();
     protected List<RegisteredUser> registeredUsers = new ArrayList<>();
-
+    protected User currentUser;
     /**
      * Creates a new instance of Webapp
      */
@@ -31,8 +32,26 @@ public class Webapp {
         
         reportedNets.add(new GhostNet(1, new LatLng(-61.45480, -41.67364), Size.MEDIUM, Status.REPORTED ));
         reportedNets.add(new GhostNet(2, new LatLng(23.76162, -42.22665), Size.LARGE, Status.LOST ));
-        reportedNets.add(new GhostNet(2, new LatLng(-47.95458, -122.56537), Size.SMALL, Status.ALLOCATED));
+        reportedNets.add(new GhostNet(3, new LatLng(-47.95458, -122.56537), Size.SMALL, Status.ALLOCATED));
         reportedNets.get(2).setReserved(registeredUsers.getFirst());
+        
+        currentUser = registeredUsers.getFirst();
+    } 
+
+    public List<RegisteredUser> getRegisteredUsers() {
+        return registeredUsers;
+    }
+
+    public void setRegisteredUsers(List<RegisteredUser> registeredUsers) {
+        this.registeredUsers = registeredUsers;
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
     }
 
     public List<GhostNet> getReportedNets() {
@@ -41,5 +60,10 @@ public class Webapp {
 
     public void setReportedNets(List<GhostNet> reportedNets) {
         this.reportedNets = reportedNets;
+    }
+    
+    public void saveNet(GhostNet newNet){
+        //Write new net to db
+        reportedNets.add(newNet);
     }
 }

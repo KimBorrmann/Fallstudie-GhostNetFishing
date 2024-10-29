@@ -41,6 +41,11 @@ public abstract class User {
         this.username = username;
     }
     
+    @Override
+    public String toString(){
+        return username;
+    }
+    
     public void reportNet(String location, Size size){
         //report net implementation
     }

@@ -4,10 +4,16 @@
  */
 package com.kim.fallstudie.ghostnetfishing.controller;
 
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Named;
+import java.io.Serializable;
+
 /**
  *
  * @author Kim.Borrmann
  */
-public class LoginController {
+@Named
+@ViewScoped
+public class LoginController implements Serializable{
     
 }
