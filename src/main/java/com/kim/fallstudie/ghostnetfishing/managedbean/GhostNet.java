@@ -15,11 +15,12 @@ import org.primefaces.model.map.LatLng;
  * @author Kim.Borrmann
  */
 @Named(value = "ghostNet")
-@Dependent
+//@Dependent
 public class GhostNet {
     
     private int id;
-    private LatLng location;
+    private double latitude;
+    private double longitude;
     private Size size;
     private Status status;
     private RegisteredUser reserved;
@@ -29,21 +30,24 @@ public class GhostNet {
      */
     public GhostNet() {
         this.id = 10;
-        this.location = null;
+        this.latitude = 0.0;
+        this.longitude = 0.0;
         this.size = null;
         this.status = null;
         this.reserved = null;
     }
 
-    public GhostNet(int id, LatLng location, Size size) {
+    public GhostNet(int id, double latitude, double longitude, Size size) {
         this.id = id;
-        this.location = location;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.size = size;
     }
     
-    public GhostNet(int id, LatLng location, Size size, Status status){
+    public GhostNet(int id, double latitude, double longitude, Size size, Status status){
         this.id = id;
-        this.location = location;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.size = size;
         this.status = status;
     }
@@ -56,12 +60,20 @@ public class GhostNet {
         this.id = id;
     }
 
-    public LatLng getLocation() {
-        return location;
+    public double getLatitude() {
+        return latitude;
     }
 
-    public void setLocation(LatLng location) {
-        this.location = location;
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
     public Size getSize() {

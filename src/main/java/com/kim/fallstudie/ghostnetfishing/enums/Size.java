@@ -9,9 +9,19 @@ package com.kim.fallstudie.ghostnetfishing.enums;
  * @author Kim.Borrmann
  */
 public enum Size{
-    VERY_SMALL,
-    SMALL,
-    MEDIUM,
-    LARGE,
-    VERY_LARGE,
+    VERY_SMALL("Sehr klein"),
+    SMALL("Klein"),
+    MEDIUM("Mittel"),
+    LARGE("Groß"),
+    VERY_LARGE("Sehr groß");
+
+    private final String displayName;
+
+    Size(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
 }

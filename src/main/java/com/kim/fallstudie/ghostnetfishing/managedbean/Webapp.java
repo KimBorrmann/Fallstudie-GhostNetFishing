@@ -11,7 +11,6 @@ import jakarta.inject.Named;
 import jakarta.enterprise.context.ApplicationScoped;
 import java.util.ArrayList;
 import java.util.List;
-import org.primefaces.model.map.LatLng;
 
 /**
  *
@@ -23,16 +22,16 @@ public class Webapp {
     
     protected List<GhostNet> reportedNets = new ArrayList<>();
     protected List<RegisteredUser> registeredUsers = new ArrayList<>();
-    protected User currentUser;
+    protected RegisteredUser currentUser;
     /**
      * Creates a new instance of Webapp
      */
     public Webapp() {
         registeredUsers.add(new RegisteredUser("012345678", "myPassword12", 1, "Anna Fischretter"));
         
-        reportedNets.add(new GhostNet(1, new LatLng(-61.45480, -41.67364), Size.MEDIUM, Status.REPORTED ));
-        reportedNets.add(new GhostNet(2, new LatLng(23.76162, -42.22665), Size.LARGE, Status.LOST ));
-        reportedNets.add(new GhostNet(3, new LatLng(-47.95458, -122.56537), Size.SMALL, Status.ALLOCATED));
+        reportedNets.add(new GhostNet(1, -61.45480, -41.67364, Size.MEDIUM, Status.REPORTED ));
+        reportedNets.add(new GhostNet(2, 23.76162, -42.22665, Size.LARGE, Status.LOST ));
+        reportedNets.add(new GhostNet(3, -47.95458, -122.56537, Size.SMALL, Status.ALLOCATED));
         reportedNets.get(2).setReserved(registeredUsers.getFirst());
         
         currentUser = registeredUsers.getFirst();
@@ -46,11 +45,11 @@ public class Webapp {
         this.registeredUsers = registeredUsers;
     }
 
-    public User getCurrentUser() {
+    public RegisteredUser getCurrentUser() {
         return currentUser;
     }
 
-    public void setCurrentUser(User currentUser) {
+    public void setCurrentUser(RegisteredUser currentUser) {
         this.currentUser = currentUser;
     }
 

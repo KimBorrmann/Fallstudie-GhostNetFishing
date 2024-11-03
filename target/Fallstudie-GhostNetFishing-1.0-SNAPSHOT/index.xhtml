@@ -20,7 +20,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
         <div class="appContent">
             <h:form>
                 <div class="actionButtons" style="width: 100%; margin: 8px;">
-                    <p:commandButton value="Netz melden" type="button" onclick="PF('reportDialog').show()"/>
+                    <!--<p:commandButton value="Netz melden" type="button" actionListener="#{homeController.openNewNetDialog()}" oncomplete="PF('reportDialog').show()"/>-->
+                    <p:commandButton value="Netz melden" actionListener="#{homeController.openNewNetDialog}" oncomplete="PF('reportDialog').show()" />
                     <p:button value="Netz reservieren" style="margin: 4px;"/>
                     <p:button value="Netz als geborgen melden"/>
                 </div>
@@ -37,23 +38,19 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
                         
                         <div style="margin:6px;">
                             <h:outputLabel for="locationLatitude" style="margin-right: 12px;">Breitengrad</h:outputLabel>
-                            <p:inputNumber id="locationLatitude" value="#{homeController.newNet.location.lat}" decimalPlaces="5" />
+                            <p:inputNumber id="locationLatitude" value="#{homeController.newNet.latitude}" decimalPlaces="5" />
                         </div>
                         
                         <div style="margin:6px;">
                             <h:outputLabel for="locationLongitude" style="margin-right: 12px;">Längengrad</h:outputLabel>
-                            <p:inputNumber id="locationLongitude" value="#{homeController.newNet.location.lng}" decimalPlaces="5" />
+                            <p:inputNumber id="locationLongitude" value="#{homeController.newNet.longitude}" decimalPlaces="5" />
                         </div>
 
                         <div style="margin:6px;">
                             <h:outputLabel for="sizeMenu" style="margin-right: 12px;">Geschätzte Größe</h:outputLabel>
                             <p:selectOneMenu id="sizeMenu" label="Geschätzte Größe:" value="#{homeController.newNet.size}">
-                                <f:selectItem itemValue="" itemLabel="Geschätzte Größe auswählen..."/>
-                                <f:selectItem value="#{Size.VERY_SMALL}" itemLabel="Sehr klein"/>
-                                <f:selectItem value="#{Size.SMALL}" itemLabel="Klein"/>
-                                <f:selectItem value="#{Size.MEDIUM}" itemLabel="Mittel"/>
-                                <f:selectItem value="#{Size.LARGE}" itemLabel="Groß"/>
-                                <f:selectItem value="#{Size.VERY_LARGE}" itemLabel="Sehr groß"/>
+                                <f:selectItem itemLabel="Select One" itemValue="" />
+                                <f:selectItems value="#{homeController.sizeOptions}" var="size" itemLabel="#{size}" itemValue="#{size}" />
                             </p:selectOneMenu>
                         </div>
                         
@@ -63,28 +60,31 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
                         </div>
                     </div>
                     <f:facet name="footer" >
-                        <p:button onclick="#{ homeController.handleCloseNewNetDialog();reportDialog.hide()}" value="Abbrechen" styleClass="ui-button-outlined ui-button-secondary"/> <!--homeController.handleCloseNewNetDialog()-->
-                        <p:button onclick="#{homeController.handleConfirmedNewNetDialog(); reportDialog.hide() }" value="Bestätigen" /> <!--homeController.handleConfirmedNewNetDialog()-->
+                        <p:button onclick="#{reportDialog.hide()}" value="Abbrechen" styleClass="ui-button-outlined ui-button-secondary"/> <!--homeController.handleCloseNewNetDialog()-->
+                        <p:commandButton actionListener="#{homeController.handleConfirmedNewNetDialog()}" oncomplete="PF('reportDialog').hide()" update="table" value="Bestätigen" /> <!--homeController.handleConfirmedNewNetDialog()-->
                     </f:facet>
-                    <p:ajax event="open" listener="#{homeController.addNewNet()}"/>
                 </p:dialog>
             </h:form>
-            <p:dataTable var="net" value="#{webapp.reportedNets}">
+            <p:dataTable id="table" var="net" value="#{webapp.reportedNets}">
                 <p:column sortBy="#{ghostNet.id}">
                     <f:facet name="header">Id</f:facet>
                     <h:outputText value="#{net.id}"></h:outputText>
                 </p:column>
-                <p:column sortBy="#{ghostNet.location}">
-                    <f:facet name="header">Standort</f:facet>
-                    <h:outputText value="#{net.location}"></h:outputText>
+                <p:column sortBy="#{ghostNet.latitude}">
+                    <f:facet name="header">Latitude</f:facet>
+                    <h:outputText value="#{net.latitude}"></h:outputText>
+                </p:column>
+                <p:column sortBy="#{ghostNet.longitude}">
+                    <f:facet name="header">Longitude</f:facet>
+                    <h:outputText value="#{net.longitude}"></h:outputText>
                 </p:column>
                 <p:column sortBy="#{ghostNet.size}">
                     <f:facet name="header">Größe</f:facet>
-                    <h:outputText value="#{net.size}"></h:outputText>
+                    <h:outputText value="#{net.size.displayName}"></h:outputText>
                 </p:column>
                 <p:column sortBy="#{ghostNet.status}">
                     <f:facet name="header">Status</f:facet>
-                    <h:outputText value="#{net.status}"></h:outputText>
+                    <h:outputText value="#{net.status.displayName}"></h:outputText>
                 </p:column>
                 <p:column sortBy="#{ghostNet.reserved}">
                     <f:facet name="header">Reserviert für</f:facet>

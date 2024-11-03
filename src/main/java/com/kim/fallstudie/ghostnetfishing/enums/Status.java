@@ -9,8 +9,18 @@ package com.kim.fallstudie.ghostnetfishing.enums;
  * @author Kim.Borrmann
  */
 public enum Status{
-    REPORTED,
-    ALLOCATED,
-    RECOVERED,
-    LOST,
+    REPORTED("Gemeldet"),
+    ALLOCATED("Reserviert"),
+    RECOVERED("Geborgen"),
+    LOST("Verschollen");
+    
+    private final String displayName;
+    
+    Status(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
 }
