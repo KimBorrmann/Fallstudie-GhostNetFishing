@@ -8,6 +8,7 @@ import com.kim.fallstudie.ghostnetfishing.enums.Size;
 import com.kim.fallstudie.ghostnetfishing.enums.Status;
 import jakarta.inject.Named;
 import jakarta.enterprise.context.Dependent;
+import java.util.Random;
 import org.primefaces.model.map.LatLng;
 
 /**
@@ -29,7 +30,7 @@ public class GhostNet {
      * Creates a new instance of Netz
      */
     public GhostNet() {
-        this.id = 10;
+        this.id = generateRandomId();
         this.latitude = 0.0;
         this.longitude = 0.0;
         this.size = null;
@@ -50,6 +51,11 @@ public class GhostNet {
         this.longitude = longitude;
         this.size = size;
         this.status = status;
+    }
+    
+    private int generateRandomId() {
+        Random random = new Random();
+        return random.nextInt(10000);
     }
 
     public int getId() {

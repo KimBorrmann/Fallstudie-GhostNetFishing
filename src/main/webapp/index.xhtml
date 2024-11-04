@@ -12,7 +12,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
     <h:head>
         <title>Ghost Net Fishing</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <link rel="stylesheet" href="css/style.css"></link>
+        <link rel="stylesheet" href="styles/style.css"></link>
     </h:head>
     <h:body>
         <ui:include src="WEB-INF/xhtmltemplates/headertemplate.xhtml"/>
@@ -20,7 +20,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
         <div class="appContent">
             <h:form>
                 <div class="actionButtons" style="width: 100%; margin: 8px;">
-                    <!--<p:commandButton value="Netz melden" type="button" actionListener="#{homeController.openNewNetDialog()}" oncomplete="PF('reportDialog').show()"/>-->
                     <p:commandButton value="Netz melden" actionListener="#{homeController.openNewNetDialog}" oncomplete="PF('reportDialog').show()" />
                     <p:button value="Netz reservieren" style="margin: 4px;"/>
                     <p:button value="Netz als geborgen melden"/>
@@ -49,7 +48,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
                         <div style="margin:6px;">
                             <h:outputLabel for="sizeMenu" style="margin-right: 12px;">Geschätzte Größe</h:outputLabel>
                             <p:selectOneMenu id="sizeMenu" label="Geschätzte Größe:" value="#{homeController.newNet.size}">
-                                <f:selectItem itemLabel="Select One" itemValue="" />
+                                <f:selectItem itemLabel="Größe auswählen..." itemValue="" />
                                 <f:selectItems value="#{homeController.sizeOptions}" var="size" itemLabel="#{size}" itemValue="#{size}" />
                             </p:selectOneMenu>
                         </div>
