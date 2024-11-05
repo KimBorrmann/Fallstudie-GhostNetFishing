@@ -1,0 +1,21 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/style.scss to edit this template
+*/
+/*
+    Created on : 05.11.2024, 12:23:27
+    Author     : Kim.Borrmann
+*/
+.ui-menu {
+    width:100%; 
+    
+    .ui-menu-list {
+    display:flex;
+    justify-content: space-between;
+    
+        :first-child {
+        font-size: 1.5rem; 
+        font-family: serif;
+        }
+    }
+}

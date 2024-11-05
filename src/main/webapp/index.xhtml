@@ -12,7 +12,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
     <h:head>
         <title>Ghost Net Fishing</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <link rel="stylesheet" href="styles/style.css"></link>
+        <link rel="stylesheet" href="css/style.css"></link>
     </h:head>
     <h:body>
         <ui:include src="WEB-INF/xhtmltemplates/headertemplate.xhtml"/>
@@ -73,7 +73,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
                             <p:autoUpdate/>
                         </p:messages>
                 </p:dialog>
-                
             </h:form>
             <p:dataTable id="table" var="net" value="#{webapp.reportedNets}">
                 <p:column sortBy="#{ghostNet.id}">
