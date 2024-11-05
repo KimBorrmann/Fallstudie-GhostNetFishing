@@ -18,51 +18,62 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
         <ui:include src="WEB-INF/xhtmltemplates/headertemplate.xhtml"/>
         
         <div class="appContent">
-            <h:form>
+            <h:form id="form">
                 <div class="actionButtons" style="width: 100%; margin: 8px;">
                     <p:commandButton value="Netz melden" actionListener="#{homeController.openNewNetDialog}" oncomplete="PF('reportDialog').show()" />
                     <p:button value="Netz reservieren" style="margin: 4px;"/>
                     <p:button value="Netz als geborgen melden"/>
                 </div>
                 <p:dialog header="Netz melden" widgetVar="reportDialog" closable="true" closeOnEscape="true">
-                    <div class="dialogContent">
-                        <div>
-                            <p>Melde ein neues Geisternetz als eingeloggter Nutzer oder anonym als Gastnutzer.</p>
-                        </div>
-                    
-                        <div style="margin:6px;">
-                            <h:outputLabel for="reportedbyuser" style="margin-right: 12px;">Gemeldet von:</h:outputLabel>
-                            <h:outputText id="reportedbyuser" value="#{webapp.currentUser}"></h:outputText>
-                        </div>
-                        
-                        <div style="margin:6px;">
-                            <h:outputLabel for="locationLatitude" style="margin-right: 12px;">Breitengrad</h:outputLabel>
-                            <p:inputNumber id="locationLatitude" value="#{homeController.newNet.latitude}" decimalPlaces="5" />
-                        </div>
-                        
-                        <div style="margin:6px;">
-                            <h:outputLabel for="locationLongitude" style="margin-right: 12px;">Längengrad</h:outputLabel>
-                            <p:inputNumber id="locationLongitude" value="#{homeController.newNet.longitude}" decimalPlaces="5" />
-                        </div>
+                        <div class="dialogContent" id="dialogContent">
+                            <div>
+                                <p>Melde ein neues Geisternetz als eingeloggter Nutzer oder anonym als Gastnutzer.</p>
+                            </div>
 
-                        <div style="margin:6px;">
-                            <h:outputLabel for="sizeMenu" style="margin-right: 12px;">Geschätzte Größe</h:outputLabel>
-                            <p:selectOneMenu id="sizeMenu" label="Geschätzte Größe:" value="#{homeController.newNet.size}">
-                                <f:selectItem itemLabel="Größe auswählen..." itemValue="" />
-                                <f:selectItems value="#{homeController.sizeOptions}" var="size" itemLabel="#{size}" itemValue="#{size}" />
-                            </p:selectOneMenu>
+                            <div style="margin:6px;">
+                                <h:outputLabel for="reportedbyuser" style="margin-right: 12px;">Gemeldet von:</h:outputLabel>
+                                <h:outputText id="reportedbyuser" value="#{webapp.currentUser}"></h:outputText>
+                            </div>
+
+                            <div style="margin:6px;">
+                                <h:outputLabel for="locationLatitude" style="margin-right: 12px;">Breitengrad</h:outputLabel>
+                                <p:inputNumber id="locationLatitude" value="#{homeController.newNet.latitude}" decimalPlaces="5" required="true" label="Breitengrad"  requiredMessage="Der Breitengrad ist erforderlich!">
+                                    <f:validateDoubleRange minimum="-90" maximum="90" />
+                                    <p:ajax event="blur" update="messages" />
+                                </p:inputNumber>
+                            </div>
+
+                            <div style="margin:6px;">
+                                <h:outputLabel for="locationLongitude" style="margin-right: 12px;">Längengrad</h:outputLabel>
+                                <p:inputNumber id="locationLongitude" value="#{homeController.newNet.longitude}" decimalPlaces="5" required="true" label="Längengrad"  requiredMessage="Der Längengrad ist erforderlich!">
+                                    <f:validateDoubleRange minimum="-180" maximum="180" />
+                                    <p:ajax event="blur" update="messages" />
+                                </p:inputNumber>
+                            </div>
+
+                            <div style="margin:6px;">
+                                <h:outputLabel for="sizeMenu" style="margin-right: 12px;">Geschätzte Größe</h:outputLabel>
+                                <p:selectOneMenu id="sizeMenu" label="Geschätzte Größe:" value="#{homeController.newNet.size}" required="true" requiredMessage="Die Größe ist erforderlich!">
+                                    <f:selectItem itemLabel="Größe auswählen..." itemValue="" />
+                                    <f:selectItems value="#{homeController.sizeOptions}" var="size" itemLabel="#{size}" itemValue="#{size}" />
+                                    <p:ajax event="blur" update="messages" />
+                                </p:selectOneMenu>
+                            </div>
+
+                            <div style="margin:6px;">
+                                <h:outputText style="margin-right: 12px;" value="Status:"/>
+                                <h:outputText id="status" value="Gemeldet"/>
+                            </div>
                         </div>
-                        
-                        <div style="margin:6px;">
-                            <h:outputText style="margin-right: 12px;" value="Status:"/>
-                            <h:outputText id="status" value="Gemeldet"/>
-                        </div>
-                    </div>
-                    <f:facet name="footer" >
-                        <p:button onclick="#{reportDialog.hide()}" value="Abbrechen" styleClass="ui-button-outlined ui-button-secondary"/> <!--homeController.handleCloseNewNetDialog()-->
-                        <p:commandButton actionListener="#{homeController.handleConfirmedNewNetDialog()}" oncomplete="PF('reportDialog').hide()" update="table" value="Bestätigen" /> <!--homeController.handleConfirmedNewNetDialog()-->
-                    </f:facet>
+                        <f:facet name="footer" >
+                            <p:button onclick="#{reportDialog.hide()}" value="Abbrechen" styleClass="ui-button-outlined ui-button-secondary"/>
+                            <p:commandButton disabled="#{FacesContext.validationFailed}" actionListener="#{homeController.handleConfirmedNewNetDialog()}" oncomplete="if(!args.validationFailed) PF('reportDialog').hide()" update="table" value="Bestätigen" /> 
+                        </f:facet>
+                        <p:messages id="messages" showDetail="true">
+                            <p:autoUpdate/>
+                        </p:messages>
                 </p:dialog>
+                
             </h:form>
             <p:dataTable id="table" var="net" value="#{webapp.reportedNets}">
                 <p:column sortBy="#{ghostNet.id}">
