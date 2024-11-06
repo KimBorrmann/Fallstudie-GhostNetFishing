@@ -65,4 +65,21 @@ public class Webapp {
         //Write new net to db
         reportedNets.add(newNet);
     }
+    
+    public void editNet(int id, GhostNet editedNet){
+        boolean containsId = reportedNets.stream().anyMatch(net -> net.getId() == id);
+        int index = -1;
+        if(containsId){
+            for(int i = 0; i< reportedNets.size(); i++){
+                if(reportedNets.get(i).getId() == id){
+                    index = i;
+                    break;
+                }
+            }
+            
+            if(index != -1){
+                reportedNets.set(index, editedNet);
+            }
+        }
+    }
 }

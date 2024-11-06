@@ -9,7 +9,6 @@ import com.kim.fallstudie.ghostnetfishing.enums.Status;
 import jakarta.inject.Named;
 import jakarta.enterprise.context.Dependent;
 import java.util.Random;
-import org.primefaces.model.map.LatLng;
 
 /**
  *
@@ -17,7 +16,7 @@ import org.primefaces.model.map.LatLng;
  */
 @Named(value = "ghostNet")
 //@Dependent
-public class GhostNet {
+public class GhostNet{
     
     private int id;
     private double latitude;

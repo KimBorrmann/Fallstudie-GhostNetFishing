@@ -8,6 +8,8 @@ import com.kim.fallstudie.ghostnetfishing.enums.Status;
 import com.kim.fallstudie.ghostnetfishing.enums.Size;
 import com.kim.fallstudie.ghostnetfishing.managedbean.GhostNet;
 import com.kim.fallstudie.ghostnetfishing.managedbean.Webapp;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
 import jakarta.faces.model.SelectItem;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -26,12 +28,32 @@ public class HomeController implements Serializable {
     @Inject
     private Webapp app;
     private GhostNet newNet;
+    private GhostNet selectedNet;
     
     public GhostNet getNewNet() {
         if(newNet == null){
             this.newNet = new GhostNet();
         }
         return this.newNet;
+    }
+
+    public void setNewNet(GhostNet newNet) {
+        this.newNet = newNet;
+    }
+
+    public GhostNet getSelectedNet() {
+        if(selectedNet == null){
+            this.selectedNet = new GhostNet();
+        }
+        return this.selectedNet;
+    }
+
+    public void setSelectedNet(GhostNet selectedNet) {
+        this.selectedNet = selectedNet;
+    }
+    
+    public GhostNet findById(int id){
+        return app.getReportedNets().get(id);
     }
     
     public void openNewNetDialog() {
@@ -51,6 +73,19 @@ public class HomeController implements Serializable {
             app.saveNet(newNet);
             System.out.println("newNet gespeichert: " + newNet);
             clearNewNet();
+        }
+    }
+    
+    public void handleConfirmedReserveNetDialog(){
+        if(selectedNet != null){
+            int id = selectedNet.getId();
+            List<GhostNet> currentNets = app.getReportedNets();
+            boolean netExists = currentNets.stream()
+                    .anyMatch(net -> Integer.valueOf(net.getId()).equals(id));
+            if(netExists){
+                app.editNet(id, selectedNet);
+                selectedNet = new GhostNet();
+            }
         }
     }
     

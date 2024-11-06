@@ -3,6 +3,8 @@
 Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
 Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit this template
 -->
+
+
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
@@ -14,6 +16,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <link rel="stylesheet" href="css/style.css"></link>
     </h:head>
+    
     <h:body>
         <ui:include src="WEB-INF/xhtmltemplates/headertemplate.xhtml"/>
         
@@ -21,7 +24,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
             <h:form id="form">
                 <div class="actionButtons" style="width: 100%; margin: 8px;">
                     <p:commandButton value="Netz melden" actionListener="#{homeController.openNewNetDialog}" oncomplete="PF('reportDialog').show()" />
-                    <p:button value="Netz reservieren" style="margin: 4px;"/>
+                    <p:commandButton value="Netz reservieren" style="margin: 4px;" onclick="PF('reserveDialog').show();"/>
                     <p:button value="Netz als geborgen melden"/>
                 </div>
                 <p:dialog header="Netz melden" widgetVar="reportDialog" closable="true" closeOnEscape="true">
@@ -39,7 +42,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
                                 <h:outputLabel for="locationLatitude" style="margin-right: 12px;">Breitengrad</h:outputLabel>
                                 <p:inputNumber id="locationLatitude" value="#{homeController.newNet.latitude}" decimalPlaces="5" required="true" label="Breitengrad"  requiredMessage="Der Breitengrad ist erforderlich!">
                                     <f:validateDoubleRange minimum="-90" maximum="90" />
-                                    <p:ajax event="blur" update="messages" />
+                                    <p:ajax event="blur" update="messagesReport" />
                                 </p:inputNumber>
                             </div>
 
@@ -47,7 +50,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
                                 <h:outputLabel for="locationLongitude" style="margin-right: 12px;">Längengrad</h:outputLabel>
                                 <p:inputNumber id="locationLongitude" value="#{homeController.newNet.longitude}" decimalPlaces="5" required="true" label="Längengrad"  requiredMessage="Der Längengrad ist erforderlich!">
                                     <f:validateDoubleRange minimum="-180" maximum="180" />
-                                    <p:ajax event="blur" update="messages" />
+                                    <p:ajax event="blur" update="messagesReport" />
                                 </p:inputNumber>
                             </div>
 
@@ -56,7 +59,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
                                 <p:selectOneMenu id="sizeMenu" label="Geschätzte Größe:" value="#{homeController.newNet.size}" required="true" requiredMessage="Die Größe ist erforderlich!">
                                     <f:selectItem itemLabel="Größe auswählen..." itemValue="" />
                                     <f:selectItems value="#{homeController.sizeOptions}" var="size" itemLabel="#{size}" itemValue="#{size}" />
-                                    <p:ajax event="blur" update="messages" />
+                                    <p:ajax event="blur" update="messagesReport" />
                                 </p:selectOneMenu>
                             </div>
 
@@ -69,12 +72,31 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
                             <p:button onclick="#{reportDialog.hide()}" value="Abbrechen" styleClass="ui-button-outlined ui-button-secondary"/>
                             <p:commandButton disabled="#{FacesContext.validationFailed}" actionListener="#{homeController.handleConfirmedNewNetDialog()}" oncomplete="if(!args.validationFailed) PF('reportDialog').hide()" update="table" value="Bestätigen" /> 
                         </f:facet>
-                        <p:messages id="messages" showDetail="true">
+                        <p:messages id="messagesReport" showDetail="true">
                             <p:autoUpdate/>
                         </p:messages>
                 </p:dialog>
+                <p:dialog  header="Netz zum Bergen reservieren" widgetVar="reserveDialog" closable="true" closeOnEscape="true">
+                    <p>Netz zum Bergen auswählen:</p>
+                    <p:selectOneMenu id="selectReserveNetMenu" label="Netz auswählen" value="#{homeController.selectedNet}" required="true">
+                        <f:selectItem itemLabel="Netz auswählen..." itemValue="" />
+                        <f:selectItems value="#{webapp.reportedNets}" var="net" itemLabel="Id: #{net.id}, Lat: #{net.latitude}, Long: #{net.longitude}" itemValue="#{net}" />
+                        <p:ajax event="blur" update="messageReserve" />
+                    </p:selectOneMenu>
+                    <br/>
+                    <h:outputText value="Netz wird reserviert für Nutzer: #{webapp.currentUser}" />
+                    <p:messages id="messageReserve" showDetail="true">
+                        <p:autoUpdate/>
+                    </p:messages>
+                    <f:facet name="footer">
+                        <p:button onclick="#{reportDialog.hide()}" value="Abbrechen" styleClass="ui-button-outlined ui-button-secondary"/>
+                        <p:commandButton actionListener="#{homeController.handleConfirmedReserveNetDialog()}" oncomplete="PF('reserveDialog').hide()" value="Bestätigen" /> 
+                    </f:facet>
+                    
+                </p:dialog>
+                <p:growl id="growl" showDetail="true"/>
             </h:form>
-            <p:dataTable id="table" var="net" value="#{webapp.reportedNets}">
+            <p:dataTable id="table" var="net" value="#{webapp.reportedNets}" >
                 <p:column sortBy="#{ghostNet.id}">
                     <f:facet name="header">Id</f:facet>
                     <h:outputText value="#{net.id}"></h:outputText>
@@ -100,6 +122,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
                     <h:outputText value="#{net.reserved}"></h:outputText>
                 </p:column>
             </p:dataTable>
+            
         </div>
     </h:body>
 </html>
