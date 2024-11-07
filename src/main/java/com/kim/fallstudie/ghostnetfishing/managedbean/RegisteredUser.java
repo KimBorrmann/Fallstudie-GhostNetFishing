@@ -7,19 +7,29 @@ package com.kim.fallstudie.ghostnetfishing.managedbean;
 import com.kim.fallstudie.ghostnetfishing.models.User;
 import jakarta.inject.Named;
 import jakarta.enterprise.context.Dependent;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import java.util.List;
 
 /**
  *
  * @author Kim.Borrmann
  */
-@Named(value = "nutzer")
+@Named(value = "registeredUser")
 @Dependent
+@Entity
+@DiscriminatorValue("REGISTERED")
 public class RegisteredUser extends User {
     
     protected String telephone;
     protected String password;
-    protected List<GhostNet> allocatedNets;
+    
+    @OneToMany(mappedBy = "reportedBy")
+    private List<GhostNet> reportedNets;
+    
+    @OneToMany(mappedBy = "recoveredBy")
+    protected List<GhostNet> recoveredNets;
 
     /**
      * Creates a new instance of Nutzer
@@ -31,13 +41,6 @@ public class RegisteredUser extends User {
         super(userId, username);
         this.telephone = telephone;
         this.password = password;
-    }
-
-    public RegisteredUser(String telephone, String password, List<GhostNet> allocatedNets, int userId, String username) {
-        super(userId, username);
-        this.telephone = telephone;
-        this.password = password;
-        this.allocatedNets = allocatedNets;
     }
 
     public String getTelephone() {
@@ -55,12 +58,20 @@ public class RegisteredUser extends User {
     public void setPassword(String password) {
         this.password = password;
     }
-    
-    public void allocateNet(int netId){
-        //TODO:implent
+
+    public List<GhostNet> getReportedNets() {
+        return reportedNets;
     }
-    
-    public void reportRecovery(int netId){
-        //TODO:implent
+
+    public void setReportedNets(List<GhostNet> reportedNets) {
+        this.reportedNets = reportedNets;
+    }
+
+    public List<GhostNet> getRecoveredNets() {
+        return recoveredNets;
+    }
+
+    public void setRecoveredNets(List<GhostNet> recoveredNets) {
+        this.recoveredNets = recoveredNets;
     }
 }

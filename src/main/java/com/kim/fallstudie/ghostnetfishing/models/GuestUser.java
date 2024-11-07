@@ -4,10 +4,19 @@
  */
 package com.kim.fallstudie.ghostnetfishing.models;
 
+import jakarta.enterprise.context.Dependent;
+import jakarta.inject.Named;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+
 /**
  *
  * @author Kim.Borrmann
  */
+@Named(value = "guestUser")
+@Dependent
+@Entity
+@DiscriminatorValue("GUEST")
 public class GuestUser extends User{
 
     /**

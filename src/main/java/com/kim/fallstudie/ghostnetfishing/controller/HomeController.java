@@ -8,8 +8,6 @@ import com.kim.fallstudie.ghostnetfishing.enums.Status;
 import com.kim.fallstudie.ghostnetfishing.enums.Size;
 import com.kim.fallstudie.ghostnetfishing.managedbean.GhostNet;
 import com.kim.fallstudie.ghostnetfishing.managedbean.Webapp;
-import jakarta.faces.application.FacesMessage;
-import jakarta.faces.context.FacesContext;
 import jakarta.faces.model.SelectItem;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -69,23 +67,27 @@ public class HomeController implements Serializable {
     public void handleConfirmedNewNetDialog(){
         if(newNet != null){
             newNet.setStatus(Status.REPORTED);
-            newNet.setReserved(app.getCurrentUser());
+            newNet.setReportedBy(app.getCurrentUser());
             app.saveNet(newNet);
-            System.out.println("newNet gespeichert: " + newNet);
             clearNewNet();
         }
     }
     
     public void handleConfirmedReserveNetDialog(){
         if(selectedNet != null){
-            int id = selectedNet.getId();
-            List<GhostNet> currentNets = app.getReportedNets();
-            boolean netExists = currentNets.stream()
-                    .anyMatch(net -> Integer.valueOf(net.getId()).equals(id));
-            if(netExists){
-                app.editNet(id, selectedNet);
-                selectedNet = new GhostNet();
-            }
+            selectedNet.setStatus(Status.ALLOCATED);
+            selectedNet.setRecoveredBy(app.getCurrentUser());
+            app.saveNet(selectedNet);
+            selectedNet = new GhostNet();
+        }
+    }
+    
+    public void handleConfirmedRecoverNetDialog(){
+        if(selectedNet != null){
+            selectedNet.setStatus(Status.RECOVERED);
+            selectedNet.setRecoveredBy(app.getCurrentUser());
+            app.saveNet(selectedNet);
+            selectedNet = new GhostNet();
         }
     }
     

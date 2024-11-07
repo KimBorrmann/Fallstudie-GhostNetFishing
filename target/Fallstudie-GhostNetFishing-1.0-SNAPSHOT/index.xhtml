@@ -25,7 +25,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
                 <div class="actionButtons" style="width: 100%; margin: 8px;">
                     <p:commandButton value="Netz melden" actionListener="#{homeController.openNewNetDialog}" oncomplete="PF('reportDialog').show()" />
                     <p:commandButton value="Netz reservieren" style="margin: 4px;" onclick="PF('reserveDialog').show();"/>
-                    <p:button value="Netz als geborgen melden"/>
+                    <p:commandButton value="Netz als geborgen melden" onclick="PF('recoverDialog').show();"/>
                 </div>
                 <p:dialog header="Netz melden" widgetVar="reportDialog" closable="true" closeOnEscape="true">
                         <div class="dialogContent" id="dialogContent">
@@ -42,16 +42,18 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
                                 <h:outputLabel for="locationLatitude" style="margin-right: 12px;">Breitengrad</h:outputLabel>
                                 <p:inputNumber id="locationLatitude" value="#{homeController.newNet.latitude}" decimalPlaces="5" required="true" label="Breitengrad"  requiredMessage="Der Breitengrad ist erforderlich!">
                                     <f:validateDoubleRange minimum="-90" maximum="90" />
-                                    <p:ajax event="blur" update="messagesReport" />
+                                    <p:ajax event="blur" update="messageLat" />
                                 </p:inputNumber>
+                                <p:message id="messageLat" showDetail="true" for="locationLatitude"/>
                             </div>
 
                             <div style="margin:6px;">
                                 <h:outputLabel for="locationLongitude" style="margin-right: 12px;">Längengrad</h:outputLabel>
                                 <p:inputNumber id="locationLongitude" value="#{homeController.newNet.longitude}" decimalPlaces="5" required="true" label="Längengrad"  requiredMessage="Der Längengrad ist erforderlich!">
                                     <f:validateDoubleRange minimum="-180" maximum="180" />
-                                    <p:ajax event="blur" update="messagesReport" />
+                                    <p:ajax event="blur" update="messageLong" />
                                 </p:inputNumber>
+                                <p:message id="messageLong" showDetail="true" for="locationLongitude"/>
                             </div>
 
                             <div style="margin:6px;">
@@ -59,8 +61,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
                                 <p:selectOneMenu id="sizeMenu" label="Geschätzte Größe:" value="#{homeController.newNet.size}" required="true" requiredMessage="Die Größe ist erforderlich!">
                                     <f:selectItem itemLabel="Größe auswählen..." itemValue="" />
                                     <f:selectItems value="#{homeController.sizeOptions}" var="size" itemLabel="#{size}" itemValue="#{size}" />
-                                    <p:ajax event="blur" update="messagesReport" />
+                                    <p:ajax event="blur" update="messageSize" />
                                 </p:selectOneMenu>
+                                <p:message id="messageSize" showDetail="true" for="sizeMenu"/>
                             </div>
 
                             <div style="margin:6px;">
@@ -72,9 +75,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
                             <p:button onclick="#{reportDialog.hide()}" value="Abbrechen" styleClass="ui-button-outlined ui-button-secondary"/>
                             <p:commandButton disabled="#{FacesContext.validationFailed}" actionListener="#{homeController.handleConfirmedNewNetDialog()}" oncomplete="if(!args.validationFailed) PF('reportDialog').hide()" update="table" value="Bestätigen" /> 
                         </f:facet>
-                        <p:messages id="messagesReport" showDetail="true">
-                            <p:autoUpdate/>
-                        </p:messages>
                 </p:dialog>
                 <p:dialog  header="Netz zum Bergen reservieren" widgetVar="reserveDialog" closable="true" closeOnEscape="true">
                     <p>Netz zum Bergen auswählen:</p>
@@ -85,14 +85,26 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
                     </p:selectOneMenu>
                     <br/>
                     <h:outputText value="Netz wird reserviert für Nutzer: #{webapp.currentUser}" />
-                    <p:messages id="messageReserve" showDetail="true">
-                        <p:autoUpdate/>
-                    </p:messages>
+                    <p:message id="messageReserve" showDetail="true" for="selectReserveNetMenu"/>
                     <f:facet name="footer">
                         <p:button onclick="#{reportDialog.hide()}" value="Abbrechen" styleClass="ui-button-outlined ui-button-secondary"/>
                         <p:commandButton actionListener="#{homeController.handleConfirmedReserveNetDialog()}" oncomplete="PF('reserveDialog').hide()" value="Bestätigen" /> 
                     </f:facet>
-                    
+                </p:dialog>
+                <p:dialog header="Netz als geborgen melden" widgetVar="recoverDialog"  closable="true" closeOnEscape="true">
+                    <p>Netz zum Bergen auswählen:</p>
+                    <p:selectOneMenu id="selectRecoverNetMenu" label="Netz auswählen" value="#{homeController.selectedNet}" required="true">
+                        <f:selectItem itemLabel="Netz auswählen..." itemValue="" />
+                        <f:selectItems value="#{webapp.reportedNets}" var="net" itemLabel="Id: #{net.id}, Lat: #{net.latitude}, Long: #{net.longitude}" itemValue="#{net}" />
+                        <p:ajax event="blur" update="messageRecover" />
+                    </p:selectOneMenu>
+                    <br/>
+                    <h:outputText value="Netz wird als von folgendem Nutzer geborgen markiert: #{webapp.currentUser}" />
+                    <p:message id="messageRecover" showDetail="true" for="selectRecoverNetMenu"/>
+                    <f:facet name="footer">
+                        <p:button onclick="#{recoverDialog.hide()}" value="Abbrechen" styleClass="ui-button-outlined ui-button-secondary"/>
+                        <p:commandButton actionListener="#{homeController.handleConfirmedRecoverNetDialog()}" oncomplete="PF('recoverDialog').hide()" value="Bestätigen" /> 
+                    </f:facet>
                 </p:dialog>
                 <p:growl id="growl" showDetail="true"/>
             </h:form>
@@ -117,9 +129,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
                     <f:facet name="header">Status</f:facet>
                     <h:outputText value="#{net.status.displayName}"></h:outputText>
                 </p:column>
-                <p:column sortBy="#{ghostNet.reserved}">
+                <p:column sortBy="#{ghostNet.reportedBy}">
                     <f:facet name="header">Reserviert für</f:facet>
-                    <h:outputText value="#{net.reserved}"></h:outputText>
+                    <h:outputText value="#{net.reportedBy}"></h:outputText>
+                </p:column>
+                <p:column sortBy="#{ghostNet.recoveredBy}">
+                    <f:facet name="header">Reserviert für</f:facet>
+                    <h:outputText value="#{net.recoveredBy}"></h:outputText>
                 </p:column>
             </p:dataTable>
             

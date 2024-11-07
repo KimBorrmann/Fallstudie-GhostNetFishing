@@ -1,11 +1,13 @@
-com\kim\fallstudie\ghostnetfishing\JakartaRestConfiguration.class
-com\kim\fallstudie\ghostnetfishing\controller\HomeController.class
-com\kim\fallstudie\ghostnetfishing\models\GuestUser.class
+com\kim\fallstudie\ghostnetfishing\dataaccessobjects\GhostNetDAO.class
+com\kim\fallstudie\ghostnetfishing\dataaccessobjects\UserDAO.class
 com\kim\fallstudie\ghostnetfishing\managedbean\RegisteredUser.class
 com\kim\fallstudie\ghostnetfishing\managedbean\Webapp.class
 com\kim\fallstudie\ghostnetfishing\models\User.class
 com\kim\fallstudie\ghostnetfishing\resources\JakartaEE10Resource.class
-com\kim\fallstudie\ghostnetfishing\controller\LoginController.class
 com\kim\fallstudie\ghostnetfishing\enums\Status.class
 com\kim\fallstudie\ghostnetfishing\enums\Size.class
 com\kim\fallstudie\ghostnetfishing\managedbean\GhostNet.class
+com\kim\fallstudie\ghostnetfishing\JakartaRestConfiguration.class
+com\kim\fallstudie\ghostnetfishing\controller\HomeController.class
+com\kim\fallstudie\ghostnetfishing\models\GuestUser.class
+com\kim\fallstudie\ghostnetfishing\controller\LoginController.class

@@ -4,6 +4,8 @@
  */
 package com.kim.fallstudie.ghostnetfishing.managedbean;
 
+import com.kim.fallstudie.ghostnetfishing.dataaccessobjects.GhostNetDAO;
+import com.kim.fallstudie.ghostnetfishing.dataaccessobjects.UserDAO;
 import com.kim.fallstudie.ghostnetfishing.enums.Size;
 import com.kim.fallstudie.ghostnetfishing.enums.Status;
 import com.kim.fallstudie.ghostnetfishing.models.User;
@@ -23,16 +25,18 @@ public class Webapp {
     protected List<GhostNet> reportedNets = new ArrayList<>();
     protected List<RegisteredUser> registeredUsers = new ArrayList<>();
     protected RegisteredUser currentUser;
+    private GhostNetDAO ghostNetDAO;
+    private UserDAO userDAO;
     /**
      * Creates a new instance of Webapp
      */
     public Webapp() {
-        registeredUsers.add(new RegisteredUser("012345678", "myPassword12", 1, "Anna Fischretter"));
+        ghostNetDAO = new GhostNetDAO();
+        //userDAO = new UserDAO();
         
-        reportedNets.add(new GhostNet(1, -61.45480, -41.67364, Size.MEDIUM, Status.REPORTED ));
-        reportedNets.add(new GhostNet(2, 23.76162, -42.22665, Size.LARGE, Status.LOST ));
-        reportedNets.add(new GhostNet(3, -47.95458, -122.56537, Size.SMALL, Status.ALLOCATED));
-        reportedNets.get(2).setReserved(registeredUsers.getFirst());
+        //registeredUsers = getAllUsers();
+        reportedNets = getAllNets();
+        registeredUsers.add(new RegisteredUser("012345678", "myPassword12", 1, "Anna Fischretter"));
         
         currentUser = registeredUsers.getFirst();
     } 
@@ -62,11 +66,21 @@ public class Webapp {
     }
     
     public void saveNet(GhostNet newNet){
-        //Write new net to db
-        reportedNets.add(newNet);
+        //Write new net to db if the fields are valid
+        if(newNet.areFieldsValid()){
+            ghostNetDAO.saveNet(newNet);
+        }
     }
     
-    public void editNet(int id, GhostNet editedNet){
+    public List<GhostNet> getAllNets() {
+        return ghostNetDAO.findAll();
+    }
+    
+    /*public List<RegisteredUser> getAllUsers(){
+        return userDAO.findAll();
+    }*/
+    
+    /*public void editNet(int id, GhostNet editedNet){
         boolean containsId = reportedNets.stream().anyMatch(net -> net.getId() == id);
         int index = -1;
         if(containsId){
@@ -81,5 +95,5 @@ public class Webapp {
                 reportedNets.set(index, editedNet);
             }
         }
-    }
+    }*/
 }

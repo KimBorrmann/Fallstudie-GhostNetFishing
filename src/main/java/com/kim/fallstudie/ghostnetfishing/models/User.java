@@ -6,6 +6,14 @@ package com.kim.fallstudie.ghostnetfishing.models;
 
 import com.kim.fallstudie.ghostnetfishing.enums.Size;
 import com.kim.fallstudie.ghostnetfishing.managedbean.GhostNet;
+import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +21,13 @@ import java.util.List;
  *
  * @author Kim.Borrmann
  */
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "user_type")
+@Table(name = "users")
 public abstract class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     protected int userId;
     protected String username;
 
