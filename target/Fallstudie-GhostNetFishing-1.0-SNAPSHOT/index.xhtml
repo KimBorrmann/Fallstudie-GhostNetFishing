@@ -21,15 +21,14 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
         <ui:include src="WEB-INF/xhtmltemplates/headertemplate.xhtml"/>
         
         <div class="appContent">
-            <!--<h:form id="actionButtonForm">-->
-            <h:form id="form">
+            <h:form id="actionButtonForm">
                 <div class="actionButtons" style="width: 100%; margin: 8px;">
                     <p:commandButton value="Netz melden" action="#{homeController.openNewNetDialog()}" oncomplete="PF('reportDialog').show()"/>
-                    <!--<p:commandButton value="Netz reservieren" style="margin: 4px;" onclick="PF('reserveDialog').show();"/>
-                    <p:commandButton value="Netz als geborgen melden" onclick="PF('recoverDialog').show();"/>-->
+                    <p:commandButton value="Netz reservieren" style="margin: 4px;" onclick="PF('reserveDialog').show();"/>
+                    <p:commandButton value="Netz als geborgen melden" onclick="PF('recoverDialog').show();"/>
                 </div>
-            <!--</h:form>
-            <h:form id="reportForm">-->
+            </h:form>
+            <h:form id="reportForm">
                 <p:dialog id="reportDialog" header="Netz melden" widgetVar="reportDialog" closable="true" closeOnEscape="true">
                         <div class="dialogContent" id="dialogContent">
                             <div>
@@ -79,11 +78,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
                         </div>
                         <f:facet name="footer" >
                             <p:button onclick="#{reportDialog.hide()}" value="Abbrechen" styleClass="ui-button-outlined ui-button-secondary"/>
-                            <p:commandButton actionListener="#{homeController.handleConfirmedNewNetDialog()}" oncomplete="if(!args.validationFailed) PF('reportDialog').hide()" update="table" value="Bestätigen"/> 
+                            <p:commandButton actionListener="#{homeController.handleConfirmedNewNetDialog()}" oncomplete="if(!args.validationFailed) PF('reportDialog').hide()" update=":mainTableForm:table" value="Bestätigen"/> 
                         </f:facet>
                 </p:dialog>
             </h:form>
-            <!--<h:form id="reserveForm">
+            <h:form id="reserveForm">
                 <p:dialog id="reserveDialog" header="Netz zum Bergen reservieren" widgetVar="reserveDialog" closable="true" closeOnEscape="true">
                     <p>Netz zum Bergen auswählen:</p>
                     <p:selectOneMenu id="selectReserveNetMenu" label="Netz auswählen" value="#{homeController.selectedNet}" required="true">
@@ -116,9 +115,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
                         <p:commandButton actionListener="#{homeController.handleConfirmedRecoverNetDialog()}" oncomplete="PF('recoverDialog').hide()" value="Bestätigen" /> 
                     </f:facet>
                 </p:dialog>
-            </h:form>-->
+            </h:form>
             <p:growl id="growl" showDetail="true"/>
-            <!--<h:form id="mainTableForm">-->
+            <h:form id="mainTableForm">
             <p:dataTable id="table" var="net" value="#{webapp.reportedNets}" >
                 <p:column sortBy="#{ghostNet.id}">
                     <f:facet name="header">Id</f:facet>
@@ -141,7 +140,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
                     <h:outputText value="#{net.status.displayName}"></h:outputText>
                 </p:column>
                 <p:column sortBy="#{ghostNet.reportedBy}">
-                    <f:facet name="header">Reserviert für</f:facet>
+                    <f:facet name="header">Gemeldet von</f:facet>
                     <h:outputText value="#{net.reportedBy}"></h:outputText>
                 </p:column>
                 <p:column sortBy="#{ghostNet.recoveredBy}">
@@ -149,7 +148,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
                     <h:outputText value="#{net.recoveredBy}"></h:outputText>
                 </p:column>
             </p:dataTable>
-            <!--</h:form>-->
+            </h:form>
         </div>
     </h:body>
 </html>
