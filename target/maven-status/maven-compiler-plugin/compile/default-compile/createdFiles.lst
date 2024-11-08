@@ -10,4 +10,5 @@ com\kim\fallstudie\ghostnetfishing\managedbean\GhostNet.class
 com\kim\fallstudie\ghostnetfishing\JakartaRestConfiguration.class
 com\kim\fallstudie\ghostnetfishing\controller\HomeController.class
 com\kim\fallstudie\ghostnetfishing\models\GuestUser.class
+com\kim\fallstudie\ghostnetfishing\converter\GhostNetConverter.class
 com\kim\fallstudie\ghostnetfishing\controller\LoginController.class

@@ -39,6 +39,24 @@ public class GhostNetDAO {
         return allNotRecoveredNets;
     }
     
+    public GhostNet findById(int id){
+        List<GhostNet> allNets = findAll();
+        //boolean containsId = allNets.stream().anyMatch(ghostnet -> ghostnet.getId() == id);
+        int index = -1;
+            for(int i = 0; i< allNets.size(); i++){
+                if(allNets.get(i).getId() == id){
+                    index = i;
+                    break;
+                }
+            }
+            
+        if(index != -1){
+            GhostNet net = allNets.get(index);
+            return net;
+        }
+        return null;
+    }
+    
     public void saveNet(GhostNet newNet){
         EntityManager em = emf.createEntityManager();
         

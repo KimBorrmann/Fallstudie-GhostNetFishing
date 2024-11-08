@@ -85,9 +85,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
             <h:form id="reserveForm">
                 <p:dialog id="reserveDialog" header="Netz zum Bergen reservieren" widgetVar="reserveDialog" closable="true" closeOnEscape="true">
                     <p>Netz zum Bergen auswählen:</p>
-                    <p:selectOneMenu id="selectReserveNetMenu" label="Netz auswählen" value="#{homeController.selectedNet}" required="true">
-                        <f:selectItem itemLabel="Netz auswählen..." itemValue="" />
-                        <f:selectItems value="#{webapp.reportedNets}" var="net" itemLabel="Id: #{net.id}, Lat: #{net.latitude}, Long: #{net.longitude}" itemValue="#{net}" />
+                    <p:selectOneMenu id="selectReserveNetMenu" label="Netz auswählen" value="#{homeController.selectedNet}" required="true" converter="ghostNetConverter">
+                        <f:selectItem itemLabel="Netz auswählen..." itemValue="#{null}" />
+                        <f:selectItems value="#{webapp.getReportedNets()}" var="net" itemLabel="Id: #{net.id}, Lat: #{net.latitude}, Long: #{net.longitude}" itemValue="#{net}" />
                         <p:ajax event="blur" update="messageReserve" />
                     </p:selectOneMenu>
                     <br/>
@@ -102,9 +102,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
             <h:form id="recoverDialog">
                 <p:dialog id="recoverDialog" header="Netz als geborgen melden" widgetVar="recoverDialog"  closable="true" closeOnEscape="true">
                     <p>Netz zum Bergen auswählen:</p>
-                    <p:selectOneMenu id="selectRecoverNetMenu" label="Netz auswählen" value="#{homeController.selectedNet}" required="true">
-                        <f:selectItem itemLabel="Netz auswählen..." itemValue="" />
-                        <f:selectItems value="#{webapp.reportedNets}" var="net" itemLabel="Id: #{net.id}, Lat: #{net.latitude}, Long: #{net.longitude}" itemValue="#{net}" />
+                    <p:selectOneMenu id="selectRecoverNetMenu" label="Netz auswählen" value="#{homeController.selectedNet}" required="true" converter="ghostNetConverter">
+                        <f:selectItem itemLabel="Netz auswählen..." itemValue="#{null}" />
+                        <f:selectItems value="#{webapp.getReportedNets()}" var="net" itemLabel="Id: #{net.id}, Lat: #{net.latitude}, Long: #{net.longitude}" itemValue="#{net}" />
                         <p:ajax event="blur" update="messageRecover" />
                     </p:selectOneMenu>
                     <br/>
