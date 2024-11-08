@@ -9,6 +9,7 @@ import jakarta.inject.Named;
 import jakarta.enterprise.context.Dependent;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import java.util.List;
 
@@ -25,10 +26,10 @@ public class RegisteredUser extends User {
     protected String telephone;
     protected String password;
     
-    @OneToMany(mappedBy = "reportedBy")
+    @OneToMany(mappedBy = "reportedBy", fetch = FetchType.EAGER)
     private List<GhostNet> reportedNets;
     
-    @OneToMany(mappedBy = "recoveredBy")
+    @OneToMany(mappedBy = "recoveredBy", fetch = FetchType.EAGER)
     protected List<GhostNet> recoveredNets;
 
     /**

@@ -20,7 +20,7 @@ import java.util.List;
  *
  * @author Kim.Borrmann
  */
-@Named
+@Named(value = "homeController")
 @ViewScoped
 public class HomeController implements Serializable {
     @Inject
@@ -31,6 +31,7 @@ public class HomeController implements Serializable {
     public GhostNet getNewNet() {
         if(newNet == null){
             this.newNet = new GhostNet();
+            System.out.println("newNet set to new GhostNet()" + newNet);
         }
         return this.newNet;
     }
@@ -50,10 +51,6 @@ public class HomeController implements Serializable {
         this.selectedNet = selectedNet;
     }
     
-    public GhostNet findById(int id){
-        return app.getReportedNets().get(id);
-    }
-    
     public void openNewNetDialog() {
         newNet = new GhostNet();
         System.out.println("Dialog geöffnet, newNet initialisiert: " + newNet);
@@ -65,6 +62,7 @@ public class HomeController implements Serializable {
     }
     
     public void handleConfirmedNewNetDialog(){
+        System.out.println("handleConfirmedNewNetDialog called");
         if(newNet != null){
             newNet.setStatus(Status.REPORTED);
             newNet.setReportedBy(app.getCurrentUser());

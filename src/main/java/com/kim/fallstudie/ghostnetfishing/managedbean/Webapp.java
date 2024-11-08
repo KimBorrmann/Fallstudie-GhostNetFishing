@@ -6,9 +6,6 @@ package com.kim.fallstudie.ghostnetfishing.managedbean;
 
 import com.kim.fallstudie.ghostnetfishing.dataaccessobjects.GhostNetDAO;
 import com.kim.fallstudie.ghostnetfishing.dataaccessobjects.UserDAO;
-import com.kim.fallstudie.ghostnetfishing.enums.Size;
-import com.kim.fallstudie.ghostnetfishing.enums.Status;
-import com.kim.fallstudie.ghostnetfishing.models.User;
 import jakarta.inject.Named;
 import jakarta.enterprise.context.ApplicationScoped;
 import java.util.ArrayList;
@@ -25,18 +22,17 @@ public class Webapp {
     protected List<GhostNet> reportedNets = new ArrayList<>();
     protected List<RegisteredUser> registeredUsers = new ArrayList<>();
     protected RegisteredUser currentUser;
-    private GhostNetDAO ghostNetDAO;
-    private UserDAO userDAO;
+    private final GhostNetDAO ghostNetDAO;
+    private final UserDAO userDAO;
     /**
      * Creates a new instance of Webapp
      */
     public Webapp() {
         ghostNetDAO = new GhostNetDAO();
-        //userDAO = new UserDAO();
+        userDAO = new UserDAO();
         
-        //registeredUsers = getAllUsers();
+        registeredUsers = getAllUsers();
         reportedNets = getAllNets();
-        registeredUsers.add(new RegisteredUser("012345678", "myPassword12", 1, "Anna Fischretter"));
         
         currentUser = registeredUsers.getFirst();
     } 
@@ -58,7 +54,7 @@ public class Webapp {
     }
 
     public List<GhostNet> getReportedNets() {
-        return reportedNets;
+        return ghostNetDAO.findAll();
     }
 
     public void setReportedNets(List<GhostNet> reportedNets) {
@@ -76,24 +72,7 @@ public class Webapp {
         return ghostNetDAO.findAll();
     }
     
-    /*public List<RegisteredUser> getAllUsers(){
-        return userDAO.findAll();
-    }*/
-    
-    /*public void editNet(int id, GhostNet editedNet){
-        boolean containsId = reportedNets.stream().anyMatch(net -> net.getId() == id);
-        int index = -1;
-        if(containsId){
-            for(int i = 0; i< reportedNets.size(); i++){
-                if(reportedNets.get(i).getId() == id){
-                    index = i;
-                    break;
-                }
-            }
-            
-            if(index != -1){
-                reportedNets.set(index, editedNet);
-            }
-        }
-    }*/
+    public List<RegisteredUser> getAllUsers(){
+        return userDAO.findAllRegistered();
+    }
 }

@@ -21,13 +21,16 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
         <ui:include src="WEB-INF/xhtmltemplates/headertemplate.xhtml"/>
         
         <div class="appContent">
+            <!--<h:form id="actionButtonForm">-->
             <h:form id="form">
                 <div class="actionButtons" style="width: 100%; margin: 8px;">
-                    <p:commandButton value="Netz melden" actionListener="#{homeController.openNewNetDialog}" oncomplete="PF('reportDialog').show()" />
-                    <p:commandButton value="Netz reservieren" style="margin: 4px;" onclick="PF('reserveDialog').show();"/>
-                    <p:commandButton value="Netz als geborgen melden" onclick="PF('recoverDialog').show();"/>
+                    <p:commandButton value="Netz melden" action="#{homeController.openNewNetDialog()}" oncomplete="PF('reportDialog').show()"/>
+                    <!--<p:commandButton value="Netz reservieren" style="margin: 4px;" onclick="PF('reserveDialog').show();"/>
+                    <p:commandButton value="Netz als geborgen melden" onclick="PF('recoverDialog').show();"/>-->
                 </div>
-                <p:dialog header="Netz melden" widgetVar="reportDialog" closable="true" closeOnEscape="true">
+            <!--</h:form>
+            <h:form id="reportForm">-->
+                <p:dialog id="reportDialog" header="Netz melden" widgetVar="reportDialog" closable="true" closeOnEscape="true">
                         <div class="dialogContent" id="dialogContent">
                             <div>
                                 <p>Melde ein neues Geisternetz als eingeloggter Nutzer oder anonym als Gastnutzer.</p>
@@ -40,7 +43,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
 
                             <div style="margin:6px;">
                                 <h:outputLabel for="locationLatitude" style="margin-right: 12px;">Breitengrad</h:outputLabel>
-                                <p:inputNumber id="locationLatitude" value="#{homeController.newNet.latitude}" decimalPlaces="5" required="true" label="Breitengrad"  requiredMessage="Der Breitengrad ist erforderlich!">
+                                <p:inputNumber id="locationLatitude" value="#{homeController.newNet.latitude}" decimalPlaces="5" required="true" label="Breitengrad"  
+                                               requiredMessage="Der Breitengrad ist erforderlich!">
                                     <f:validateDoubleRange minimum="-90" maximum="90" />
                                     <p:ajax event="blur" update="messageLat" />
                                 </p:inputNumber>
@@ -49,7 +53,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
 
                             <div style="margin:6px;">
                                 <h:outputLabel for="locationLongitude" style="margin-right: 12px;">Längengrad</h:outputLabel>
-                                <p:inputNumber id="locationLongitude" value="#{homeController.newNet.longitude}" decimalPlaces="5" required="true" label="Längengrad"  requiredMessage="Der Längengrad ist erforderlich!">
+                                <p:inputNumber id="locationLongitude" value="#{homeController.newNet.longitude}" decimalPlaces="5" required="true" label="Längengrad"  
+                                               requiredMessage="Der Längengrad ist erforderlich!">
                                     <f:validateDoubleRange minimum="-180" maximum="180" />
                                     <p:ajax event="blur" update="messageLong" />
                                 </p:inputNumber>
@@ -58,7 +63,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
 
                             <div style="margin:6px;">
                                 <h:outputLabel for="sizeMenu" style="margin-right: 12px;">Geschätzte Größe</h:outputLabel>
-                                <p:selectOneMenu id="sizeMenu" label="Geschätzte Größe:" value="#{homeController.newNet.size}" required="true" requiredMessage="Die Größe ist erforderlich!">
+                                <p:selectOneMenu id="sizeMenu" label="Geschätzte Größe:" value="#{homeController.newNet.size}" required="true" 
+                                                 requiredMessage="Die Größe ist erforderlich!">
                                     <f:selectItem itemLabel="Größe auswählen..." itemValue="" />
                                     <f:selectItems value="#{homeController.sizeOptions}" var="size" itemLabel="#{size}" itemValue="#{size}" />
                                     <p:ajax event="blur" update="messageSize" />
@@ -73,10 +79,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
                         </div>
                         <f:facet name="footer" >
                             <p:button onclick="#{reportDialog.hide()}" value="Abbrechen" styleClass="ui-button-outlined ui-button-secondary"/>
-                            <p:commandButton disabled="#{FacesContext.validationFailed}" actionListener="#{homeController.handleConfirmedNewNetDialog()}" oncomplete="if(!args.validationFailed) PF('reportDialog').hide()" update="table" value="Bestätigen" /> 
+                            <p:commandButton actionListener="#{homeController.handleConfirmedNewNetDialog()}" oncomplete="if(!args.validationFailed) PF('reportDialog').hide()" update="table" value="Bestätigen"/> 
                         </f:facet>
                 </p:dialog>
-                <p:dialog  header="Netz zum Bergen reservieren" widgetVar="reserveDialog" closable="true" closeOnEscape="true">
+            </h:form>
+            <!--<h:form id="reserveForm">
+                <p:dialog id="reserveDialog" header="Netz zum Bergen reservieren" widgetVar="reserveDialog" closable="true" closeOnEscape="true">
                     <p>Netz zum Bergen auswählen:</p>
                     <p:selectOneMenu id="selectReserveNetMenu" label="Netz auswählen" value="#{homeController.selectedNet}" required="true">
                         <f:selectItem itemLabel="Netz auswählen..." itemValue="" />
@@ -91,7 +99,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
                         <p:commandButton actionListener="#{homeController.handleConfirmedReserveNetDialog()}" oncomplete="PF('reserveDialog').hide()" value="Bestätigen" /> 
                     </f:facet>
                 </p:dialog>
-                <p:dialog header="Netz als geborgen melden" widgetVar="recoverDialog"  closable="true" closeOnEscape="true">
+            </h:form>
+            <h:form id="recoverDialog">
+                <p:dialog id="recoverDialog" header="Netz als geborgen melden" widgetVar="recoverDialog"  closable="true" closeOnEscape="true">
                     <p>Netz zum Bergen auswählen:</p>
                     <p:selectOneMenu id="selectRecoverNetMenu" label="Netz auswählen" value="#{homeController.selectedNet}" required="true">
                         <f:selectItem itemLabel="Netz auswählen..." itemValue="" />
@@ -106,8 +116,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
                         <p:commandButton actionListener="#{homeController.handleConfirmedRecoverNetDialog()}" oncomplete="PF('recoverDialog').hide()" value="Bestätigen" /> 
                     </f:facet>
                 </p:dialog>
-                <p:growl id="growl" showDetail="true"/>
-            </h:form>
+            </h:form>-->
+            <p:growl id="growl" showDetail="true"/>
+            <!--<h:form id="mainTableForm">-->
             <p:dataTable id="table" var="net" value="#{webapp.reportedNets}" >
                 <p:column sortBy="#{ghostNet.id}">
                     <f:facet name="header">Id</f:facet>
@@ -138,7 +149,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
                     <h:outputText value="#{net.recoveredBy}"></h:outputText>
                 </p:column>
             </p:dataTable>
-            
+            <!--</h:form>-->
         </div>
     </h:body>
 </html>

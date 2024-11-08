@@ -4,12 +4,15 @@
  */
 package com.kim.fallstudie.ghostnetfishing.dataaccessobjects;
 
+import com.kim.fallstudie.ghostnetfishing.enums.Status;
 import com.kim.fallstudie.ghostnetfishing.managedbean.GhostNet;
+import com.kim.fallstudie.ghostnetfishing.managedbean.RegisteredUser;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 import java.util.List;
 
 /**
@@ -27,6 +30,15 @@ public class GhostNetDAO {
         return allGhostNets;
     }
     
+    public List<GhostNet> findAllNotRecovered(){
+        EntityManager em = emf.createEntityManager();
+        TypedQuery<GhostNet> query = em.createQuery("SELECT g FROM GhostNet g WHERE g.status <> :status", GhostNet.class);
+        query.setParameter("status", Status.RECOVERED);
+        List<GhostNet> allNotRecoveredNets = query.getResultList();
+        em.close();
+        return allNotRecoveredNets;
+    }
+    
     public void saveNet(GhostNet newNet){
         EntityManager em = emf.createEntityManager();
         
@@ -34,6 +46,44 @@ public class GhostNetDAO {
         
         t.begin();
             em.merge(newNet);
+        t.commit();
+        
+        em.close();
+    }
+    
+    public void deleteGhostNet(GhostNet net){
+        EntityManager em = emf.createEntityManager();
+        
+        EntityTransaction t = em.getTransaction();
+        
+        t.begin();
+            //get net Entity into Context of EntityManager
+            net = em.merge(net);
+        t.commit();
+        
+        //Remove Associations
+        RegisteredUser reportingUser = null;
+        RegisteredUser recoveringUser = null;
+        if (net.getReportedBy() != null) {
+            int id = net.getReportedBy().getUserId();
+            reportingUser = em.find(RegisteredUser.class, id);
+            reportingUser.getReportedNets().remove(net);
+        }
+        if (net.getRecoveredBy() != null) {
+            int id = net.getRecoveredBy().getUserId();
+            recoveringUser = em.find(RegisteredUser.class, id);
+            recoveringUser.getRecoveredNets().remove(net);
+        }
+        t.begin();
+            //Update Users
+            if(reportingUser != null){
+               em.merge(reportingUser);
+            }
+            if(recoveringUser != null){
+                em.merge(recoveringUser);
+            }
+            //remove net
+            em.remove(net);
         t.commit();
         
         em.close();
