@@ -20,6 +20,7 @@ import java.util.List;
 public class Webapp {
     
     protected List<GhostNet> reportedNets = new ArrayList<>();
+    protected List<GhostNet> recoveredNets = new ArrayList<>();
     protected List<RegisteredUser> registeredUsers = new ArrayList<>();
     protected RegisteredUser currentUser;
     private final GhostNetDAO ghostNetDAO;
@@ -32,7 +33,8 @@ public class Webapp {
         userDAO = new UserDAO();
         
         registeredUsers = getAllUsers();
-        reportedNets = getAllNets();
+        reportedNets = getReportedNets();
+        recoveredNets = getRecoveredNets();
         
         currentUser = registeredUsers.getFirst();
     } 
@@ -54,11 +56,19 @@ public class Webapp {
     }
 
     public List<GhostNet> getReportedNets() {
-        return ghostNetDAO.findAll();
+        return ghostNetDAO.findAllNotRecovered();
     }
 
     public void setReportedNets(List<GhostNet> reportedNets) {
         this.reportedNets = reportedNets;
+    }
+
+    public List<GhostNet> getRecoveredNets() {
+        return ghostNetDAO.findRecovered();
+    }
+
+    public void setRecoveredNets(List<GhostNet> recoveredNets) {
+        this.recoveredNets = recoveredNets;
     }
     
     public void saveNet(GhostNet newNet){

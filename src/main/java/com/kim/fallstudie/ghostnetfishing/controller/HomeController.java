@@ -56,6 +56,11 @@ public class HomeController implements Serializable {
         System.out.println("Dialog geöffnet, newNet initialisiert: " + newNet);
     }
     
+    public void openReserveNetDialog() {
+        selectedNet = new GhostNet();
+        System.out.println("Reserve Dialog geöffnet, selectedNet initialisiert: " + selectedNet);
+    }
+    
     public void clearNewNet(){
         newNet = null;
         System.out.println("newNet null gesetzt");
@@ -72,6 +77,7 @@ public class HomeController implements Serializable {
     }
     
     public void handleConfirmedReserveNetDialog(){
+        System.out.println("Confirmed Reserve Net Dialog called");
         if(selectedNet != null){
             selectedNet.setStatus(Status.ALLOCATED);
             selectedNet.setRecoveredBy(app.getCurrentUser());

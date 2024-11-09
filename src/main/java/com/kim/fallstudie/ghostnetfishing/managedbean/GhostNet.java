@@ -16,6 +16,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import java.util.Objects;
 
 /**
  *
@@ -132,5 +133,24 @@ public class GhostNet{
             return false;
         }
         return true;
+    }
+    
+    @Override
+    public boolean equals(Object obj){
+        if(this == obj){
+            return true;
+        }
+        if(obj == null || getClass() != obj.getClass()){
+            return false;
+        }
+        GhostNet ghostNet = (GhostNet) obj;
+        return id == ghostNet.id;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 71 * hash + this.id;
+        return hash;
     }
 }

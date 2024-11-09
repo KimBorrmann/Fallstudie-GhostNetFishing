@@ -18,13 +18,18 @@ import jakarta.faces.convert.FacesConverter;
 @FacesConverter(forClass = GhostNet.class)
 public class GhostNetConverter implements Converter {
     
+    private GhostNetDAO ghostNetDAO;
+    
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value){
         if(value == null || value.isEmpty()){
             return null;
         }
+        
         int id = Integer.parseInt(value);
-        GhostNetDAO ghostNetDAO = context.getApplication().evaluateExpressionGet(context, "#{ghostNetDAO}", GhostNetDAO.class);
+        if(ghostNetDAO == null){
+            ghostNetDAO = new GhostNetDAO();
+        }
         return ghostNetDAO.findById(id);
     }
     

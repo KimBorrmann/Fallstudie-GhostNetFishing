@@ -39,6 +39,15 @@ public class GhostNetDAO {
         return allNotRecoveredNets;
     }
     
+    public List<GhostNet> findRecovered(){
+        EntityManager em = emf.createEntityManager();
+        TypedQuery<GhostNet> query = em.createQuery("SELECT g FROM GhostNet g WHERE g.status = :status", GhostNet.class);
+        query.setParameter("status", Status.RECOVERED);
+        List<GhostNet> allNotRecoveredNets = query.getResultList();
+        em.close();
+        return allNotRecoveredNets;
+    }
+    
     public GhostNet findById(int id){
         List<GhostNet> allNets = findAll();
         //boolean containsId = allNets.stream().anyMatch(ghostnet -> ghostnet.getId() == id);
