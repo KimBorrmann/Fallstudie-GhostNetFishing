@@ -36,7 +36,7 @@ public class Webapp {
         reportedNets = getReportedNets();
         recoveredNets = getRecoveredNets();
         
-        currentUser = registeredUsers.getFirst();
+        //currentUser = registeredUsers.getFirst();
     } 
 
     public List<RegisteredUser> getRegisteredUsers() {

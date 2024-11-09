@@ -16,6 +16,7 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -32,6 +33,10 @@ public abstract class User {
     protected String username;
 
     public User() {
+    }
+
+    public User(String username) {
+        this.username = username;
     }
 
     public User(int userId, String username) {
@@ -60,12 +65,22 @@ public abstract class User {
         return username;
     }
     
-    public void reportNet(String location, Size size){
-        //report net implementation
+    @Override
+    public boolean equals(Object obj){
+        if(obj instanceof User){
+            User u = (User)obj;
+            if(u.getUsername().equals(this.username) &&
+                    u.getUserId() == this.userId)
+                return true;
+        }
+        return false;
     }
-    
-    public List<GhostNet> viewReportedNets(){
-        //TODO:implent
-        return new ArrayList<>();
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 67 * hash + this.userId;
+        hash = 67 * hash + Objects.hashCode(this.username);
+        return hash;
     }
 }

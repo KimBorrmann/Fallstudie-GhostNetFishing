@@ -11,7 +11,9 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
+import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -21,7 +23,7 @@ import java.util.List;
 @Dependent
 @Entity
 @DiscriminatorValue("REGISTERED")
-public class RegisteredUser extends User {
+public class RegisteredUser extends User implements Serializable {
     
     protected String telephone;
     protected String password;
@@ -36,6 +38,17 @@ public class RegisteredUser extends User {
      * Creates a new instance of Nutzer
      */
     public RegisteredUser() {
+    }
+
+    public RegisteredUser(String password, String username) {
+        super(username);
+        this.password = password;
+    }
+
+    public RegisteredUser(String telephone, String password, String username) {
+        super(username);
+        this.telephone = telephone;
+        this.password = password;
     }
 
     public RegisteredUser(String telephone, String password, int userId, String username) {
@@ -75,4 +88,32 @@ public class RegisteredUser extends User {
     public void setRecoveredNets(List<GhostNet> recoveredNets) {
         this.recoveredNets = recoveredNets;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 83 * hash + Objects.hashCode(this.telephone);
+        hash = 83 * hash + Objects.hashCode(this.password);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final RegisteredUser other = (RegisteredUser) obj;
+        if (!Objects.equals(this.username, other.username)) {
+            return false;
+        }
+        return Objects.equals(this.password, other.password);
+    }
+    
+    
 }
