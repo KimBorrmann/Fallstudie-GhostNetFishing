@@ -71,6 +71,11 @@ public class LoginController implements Serializable{
         return "index.xhtml";
     }
     
+    public String logout(){
+        currentUser = new RegisteredUser("Gast","Gast");
+        return "login.xhmtl";
+    }
+    
     public void postValidateName(ComponentSystemEvent ev)throws AbortProcessingException {
         UIInput temp = (UIInput)ev.getComponent();
         this.name = (String)temp.getValue();

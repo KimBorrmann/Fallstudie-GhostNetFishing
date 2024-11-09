@@ -18,7 +18,18 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
     </h:head>
     
     <h:body>
-        <ui:include src="WEB-INF/xhtmltemplates/headertemplate.xhtml"/>
+        <!--<ui:include src="WEB-INF/xhtmltemplates/headertemplate.xhtml"/>-->
+        <div>
+            <h:form>
+            <p:menubar id="menubar" >
+                    <p:menuitem id="homeButton" value="Ghost Net Fishing" title="Home" url="/Fallstudie-GhostNetFishing/" />
+                    <!--<p:menuitem id="profileButton" value="Profil" />-->
+            </p:menubar>
+            <p:splitButton value="Profil" id="profileButton" >
+                <p:menuitem value="Ausloggen" action="#{loginController.logout}" />
+            </p:splitButton>
+            </h:form>
+        </div>
         
         <div class="appContent">
             <h:form id="actionButtonForm">
