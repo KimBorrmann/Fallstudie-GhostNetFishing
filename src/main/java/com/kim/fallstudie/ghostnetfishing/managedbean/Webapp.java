@@ -22,7 +22,7 @@ public class Webapp {
     protected List<GhostNet> reportedNets = new ArrayList<>();
     protected List<GhostNet> recoveredNets = new ArrayList<>();
     protected List<RegisteredUser> registeredUsers = new ArrayList<>();
-    protected RegisteredUser currentUser;
+    //protected RegisteredUser currentUser;
     private final GhostNetDAO ghostNetDAO;
     private final UserDAO userDAO;
     /**
@@ -45,14 +45,6 @@ public class Webapp {
 
     public void setRegisteredUsers(List<RegisteredUser> registeredUsers) {
         this.registeredUsers = registeredUsers;
-    }
-
-    public RegisteredUser getCurrentUser() {
-        return currentUser;
-    }
-
-    public void setCurrentUser(RegisteredUser currentUser) {
-        this.currentUser = currentUser;
     }
 
     public List<GhostNet> getReportedNets() {

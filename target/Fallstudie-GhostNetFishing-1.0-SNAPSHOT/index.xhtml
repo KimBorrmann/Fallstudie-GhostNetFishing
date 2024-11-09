@@ -24,8 +24,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
             <h:form id="actionButtonForm">
                 <div class="actionButtons" style="width: 100%; margin: 8px;">
                     <p:commandButton value="Netz melden" action="#{homeController.openNewNetDialog()}" oncomplete="PF('reportDialog').show()"/>
-                    <p:commandButton value="Netz reservieren" style="margin: 4px;" action="#{homeController.openReserveNetDialog()}" onclick="PF('reserveDialog').show();"/>
-                    <p:commandButton value="Netz als geborgen melden" onclick="PF('recoverDialog').show();"/>
+                    <p:commandButton value="Netz reservieren" style="margin: 4px;" action="#{homeController.openReserveNetDialog()}" oncomplete="PF('reserveDialog').show();"/>
+                    <p:commandButton value="Netz als geborgen melden" action="#{homeController.openRecoverNetDialog()}" oncomplete="PF('recoverDialog').show();"/>
                 </div>
             </h:form>
             <h:form id="reportForm">
@@ -37,7 +37,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
 
                             <div style="margin:6px;">
                                 <h:outputLabel for="reportedbyuser" style="margin-right: 12px;">Gemeldet von:</h:outputLabel>
-                                <h:outputText id="reportedbyuser" value="#{webapp.currentUser}"></h:outputText>
+                                <h:outputText id="reportedbyuser" value="#{loginController.currentUser}"></h:outputText>
                             </div>
 
                             <div style="margin:6px;">
@@ -91,7 +91,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
                         <p:ajax event="itemSelect" update="messageReserve" />
                     </p:selectOneMenu>
                     <br/>
-                    <h:outputText value="Netz wird reserviert für Nutzer: #{webapp.currentUser}" />
+                    <h:outputText value="Netz wird reserviert für Nutzer: #{loginController.currentUser}" />
                     <p:message id="messageReserve" showDetail="true" for="selectReserveNetMenu"/>
                     <f:facet name="footer">
                         <p:button onclick="#{reportDialog.hide()}" value="Abbrechen" styleClass="ui-button-outlined ui-button-secondary"/>
@@ -108,7 +108,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
                         <p:ajax event="itemSelect" update="messageRecover" />
                     </p:selectOneMenu>
                     <br/>
-                    <h:outputText value="Netz wird als von folgendem Nutzer geborgen markiert: #{webapp.currentUser}" />
+                    <h:outputText value="Netz wird als von folgendem Nutzer geborgen markiert: #{loginController.currentUser}" />
                     <p:message id="messageRecover" showDetail="true" for="selectRecoverNetMenu"/>
                     <f:facet name="footer">
                         <p:button onclick="#{recoverDialog.hide()}" value="Abbrechen" styleClass="ui-button-outlined ui-button-secondary"/>

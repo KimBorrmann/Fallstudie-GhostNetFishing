@@ -9,24 +9,62 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
-        <title>Login to Ghost Net Fishing</title>
+        <title>Bei Ghost Net Fishing einloggen</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </h:head>
     <h:body>
         <h2>Login</h2>
-        <h:form>
-            <h:panelGrid columns="2">
+        <h:form id="mainForm">
+            <h:panelGrid columns="3">
                 <h:outputLabel value="Benutzername:" for="name" />
-                <h:inputText id="name" value="#{loginController.currentUser.username}" >
+                <p:inputText id="name" value="#{loginController.currentUser.username}" required="true" requiredMessage="Der Benutzername ist erforderlich!" >
                     <f:event type="postValidate" listener="#{loginController.postValidateName}" />
-                </h:inputText>
+                </p:inputText>
+                <p:message for="name" styleClass="error" />
                 
                 <h:outputLabel value="Passwort:" for="pass"/>
-                <h:inputSecret id="pass" value="#{loginController.currentUser.password}" />
-                <h:message for="pass" styleClass="error" />
+                <p:password id="pass" value="#{loginController.currentUser.password}" required="true" requiredMessage="Das Passwort ist erforderlich!" />
+                <p:message for="pass" />
                 
                 <p:commandButton value="Login" action="#{loginController.login()}" />
+                <p:commandButton styleClass="ui-button-outlined ui-button-secondary" value="Ohne Login weiter" action="#{loginController.continueWithoutLogin()}" />
+                <p:commandButton value="Account erstellen" onclick="PF('createAccDialog').show()"/>
             </h:panelGrid>
+            <p:messages id="msg" showDetail="true" />
+        </h:form>
+        <h:form id="createAccDialogForm">
+            <p:dialog id="createAccDialog" widgetVar="createAccDialog" header="Account erstellen" closable="true" closeOnEscape="true">
+                <h:panelGrid columns="3">
+                    <h:outputLabel value="Benutzername:" for="createName" />
+                    <p:inputText id="createName" value="#{loginController.newUser.username}" 
+                                 required="true" requiredMessage="Der Benutzername ist erforderlich!" maxlength="100" validator="#{loginController.validateNewName}">
+                    </p:inputText>
+                    <p:message id="createNameMsg" for="createName" />
+                    
+                    <h:outputLabel value="Passwort:" for="pwd1" />
+                    <p:password id="pwd1" value="#{loginController.newUser.password}" feedback="false" match="pwd2"
+                                 required="true" requiredMessage="Das Passwort ist erforderlich!" >
+                    </p:password>
+                    <p:message id="pwd1msg" for="pwd1" />
+                    
+                    <h:outputLabel value="Passwort:" for="pwd2" />
+                    <p:password id="pwd2" value="#{loginController.newUser.password}" feedback="false"
+                                 required="true" requiredMessage="Das Passwort ist erforderlich!" >
+                    </p:password>
+                    <p:message id="pwd2msg" for="pwd2" />
+                    
+                    <h:outputLabel value="Telefonnummer:" for="phoneNumber" />
+                    <p:inputText id="phoneNumber" value="#{loginController.newUser.telephone}" 
+                                 required="true" requiredMessage="Die Telefonnummer ist erforderlich!" validator="#{loginController.validateTelephoneNumber}">
+                    </p:inputText>
+                    <p:message id="phoneNumberMsg" for="phoneNumber" />
+                </h:panelGrid>
+                <f:facet name="footer">
+                    <p:button onclick="#{createAccDialog.hide()}" value="Abbrechen" styleClass="ui-button-outlined ui-button-secondary"/>
+                        <p:commandButton actionListener="#{loginController.createAccount()}" oncomplete="PF('createAccDialog').hide()" 
+                                         update=":mainForm" value="Bestätigen" />
+                </f:facet>
+            </p:dialog>
         </h:form>
     </h:body>
 </html>

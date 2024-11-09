@@ -7,14 +7,21 @@ package com.kim.fallstudie.ghostnetfishing.controller;
 import com.kim.fallstudie.ghostnetfishing.enums.Status;
 import com.kim.fallstudie.ghostnetfishing.enums.Size;
 import com.kim.fallstudie.ghostnetfishing.managedbean.GhostNet;
+import com.kim.fallstudie.ghostnetfishing.managedbean.RegisteredUser;
 import com.kim.fallstudie.ghostnetfishing.managedbean.Webapp;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.ExternalContext;
+import jakarta.faces.context.FacesContext;
 import jakarta.faces.model.SelectItem;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -25,6 +32,10 @@ import java.util.List;
 public class HomeController implements Serializable {
     @Inject
     private Webapp app;
+    
+    @Inject
+    private LoginController loginController;
+    
     private GhostNet newNet;
     private GhostNet selectedNet;
     
@@ -52,13 +63,48 @@ public class HomeController implements Serializable {
     }
     
     public void openNewNetDialog() {
+        if(loginController.getCurrentUser() == null || loginController.getCurrentUser().getUsername() == null ){
+            loginController.setCurrentUser(new RegisteredUser("Gast", "Gast")); //app.getRegisteredUsers().getFirst()
+        }
         newNet = new GhostNet();
         System.out.println("Dialog geöffnet, newNet initialisiert: " + newNet);
     }
     
     public void openReserveNetDialog() {
-        selectedNet = new GhostNet();
-        System.out.println("Reserve Dialog geöffnet, selectedNet initialisiert: " + selectedNet);
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        if(loginController.getCurrentUser() == null || 
+                loginController.getCurrentUser().getUsername() == null ||
+                loginController.getCurrentUser().getUsername().equals("Gast")){
+            facesContext.validationFailed();
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Validation fehlgeschlagen!", "Sie müssen eingeloggt sein um Netze zu reservieren!"));
+            try{
+                ExternalContext externalContext = facesContext.getExternalContext();
+                externalContext.redirect(externalContext.getRequestContextPath() + "/login.xhtml");
+            } catch (IOException ex) {
+                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }else{
+            selectedNet = new GhostNet();
+            System.out.println("Reserve Dialog geöffnet, selectedNet initialisiert: " + selectedNet);
+        }
+    }
+    
+    public void openRecoverNetDialog() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        if(loginController.getCurrentUser() == null || 
+                loginController.getCurrentUser().getUsername() == null ||
+                loginController.getCurrentUser().getUsername().equals("Gast")){
+            facesContext.validationFailed();
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Validation fehlgeschlagen!", "Sie müssen eingeloggt sein um Netze als Geborgen zu melden!"));
+            try{
+                ExternalContext externalContext = facesContext.getExternalContext();
+                externalContext.redirect(externalContext.getRequestContextPath() + "/login.xhtml");
+            } catch (IOException ex) {
+                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }else{
+            System.out.println("Recover Dialog geöffnet");
+        }
     }
     
     public void clearNewNet(){
@@ -70,7 +116,7 @@ public class HomeController implements Serializable {
         System.out.println("handleConfirmedNewNetDialog called");
         if(newNet != null){
             newNet.setStatus(Status.REPORTED);
-            newNet.setReportedBy(app.getCurrentUser());
+            newNet.setReportedBy(loginController.getCurrentUser());
             app.saveNet(newNet);
             clearNewNet();
         }
@@ -80,7 +126,7 @@ public class HomeController implements Serializable {
         System.out.println("Confirmed Reserve Net Dialog called");
         if(selectedNet != null){
             selectedNet.setStatus(Status.ALLOCATED);
-            selectedNet.setRecoveredBy(app.getCurrentUser());
+            selectedNet.setRecoveredBy(loginController.getCurrentUser());
             app.saveNet(selectedNet);
             selectedNet = new GhostNet();
         }
@@ -89,7 +135,7 @@ public class HomeController implements Serializable {
     public void handleConfirmedRecoverNetDialog(){
         if(selectedNet != null){
             selectedNet.setStatus(Status.RECOVERED);
-            selectedNet.setRecoveredBy(app.getCurrentUser());
+            selectedNet.setRecoveredBy(loginController.getCurrentUser());
             app.saveNet(selectedNet);
             selectedNet = new GhostNet();
         }
