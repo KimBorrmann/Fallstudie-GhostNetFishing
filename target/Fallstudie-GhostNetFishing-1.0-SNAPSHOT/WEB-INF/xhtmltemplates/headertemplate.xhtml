@@ -11,14 +11,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
         xmlns:h="http://xmlns.jcp.org/jsf/html"
         xmlns:p="http://primefaces.org/ui"
         xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
-        <h:form>
+        <h:form id="navForm">
             <p:menubar id="menubar" >
                     <p:menuitem id="homeButton" value="Ghost Net Fishing" title="Home" url="/Fallstudie-GhostNetFishing/" />
-                    <!--<p:menuitem id="profileButton" value="Profil" />-->
-                    <p:splitButton value="Profil" id="profileButton" >
-                        <p:menuitem value="Ausloggen" action="#{loginController.logout}" />
-                    </p:splitButton>
             </p:menubar>
-        </h:form>
+            <p:splitButton value="Profil" id="profileButton" >
+                <p:menuitem value="Ausloggen" action="#{loginController.logout}" />
+            </p:splitButton>
+            </h:form>
     </ui:composition>
 </html>

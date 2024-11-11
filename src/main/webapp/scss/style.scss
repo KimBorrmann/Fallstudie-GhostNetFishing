@@ -7,7 +7,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/style.scss to edit thi
     Author     : Kim.Borrmann
 */
 .ui-menu {
-    width:100%; 
+    width:90%; 
     
     .ui-menu-list {
     display:flex;
@@ -18,4 +18,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/style.scss to edit thi
         font-family: serif;
         }
     }
+}
+
+#navForm{
+    display: flex;
+    align-items: center;
 }
