@@ -21,6 +21,7 @@ public class Webapp {
     
     protected List<GhostNet> reportedNets = new ArrayList<>();
     protected List<GhostNet> recoveredNets = new ArrayList<>();
+    protected List<GhostNet> lostSelectableNets = new ArrayList<>();
     protected List<RegisteredUser> registeredUsers = new ArrayList<>();
     //protected RegisteredUser currentUser;
     private final GhostNetDAO ghostNetDAO;
@@ -35,8 +36,7 @@ public class Webapp {
         registeredUsers = getAllUsers();
         reportedNets = getReportedNets();
         recoveredNets = getRecoveredNets();
-        
-        //currentUser = registeredUsers.getFirst();
+        lostSelectableNets = lostSelectableNets();
     } 
 
     public List<RegisteredUser> getRegisteredUsers() {
@@ -76,5 +76,9 @@ public class Webapp {
     
     public List<RegisteredUser> getAllUsers(){
         return userDAO.findAllRegistered();
+    }
+    
+    public List<GhostNet> lostSelectableNets(){
+        return ghostNetDAO.findAllNotLostOrRecovered();
     }
 }

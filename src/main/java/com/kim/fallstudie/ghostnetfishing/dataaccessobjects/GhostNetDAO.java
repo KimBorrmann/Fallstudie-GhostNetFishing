@@ -39,6 +39,16 @@ public class GhostNetDAO {
         return allNotRecoveredNets;
     }
     
+    public List<GhostNet> findAllNotLostOrRecovered(){
+        EntityManager em = emf.createEntityManager();
+        TypedQuery<GhostNet> query = em.createQuery("SELECT g FROM GhostNet g WHERE g.status NOT IN (:status1, :status2)", GhostNet.class);
+        query.setParameter("status1", Status.RECOVERED);
+        query.setParameter("status2", Status.LOST);
+        List<GhostNet> allNotLostNets = query.getResultList();
+        em.close();
+        return allNotLostNets;
+    }
+    
     public List<GhostNet> findRecovered(){
         EntityManager em = emf.createEntityManager();
         TypedQuery<GhostNet> query = em.createQuery("SELECT g FROM GhostNet g WHERE g.status = :status", GhostNet.class);

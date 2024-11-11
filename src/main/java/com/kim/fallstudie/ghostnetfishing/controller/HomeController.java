@@ -107,6 +107,24 @@ public class HomeController implements Serializable {
         }
     }
     
+    public void openLostNetDialog() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        if(loginController.getCurrentUser() == null || 
+                loginController.getCurrentUser().getUsername() == null ||
+                loginController.getCurrentUser().getUsername().equals("Gast")){
+            facesContext.validationFailed();
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Validation fehlgeschlagen!", "Sie müssen eingeloggt sein um Netze als Geborgen zu melden!"));
+            try{
+                ExternalContext externalContext = facesContext.getExternalContext();
+                externalContext.redirect(externalContext.getRequestContextPath() + "/login.xhtml");
+            } catch (IOException ex) {
+                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }else{
+            System.out.println("Lost Dialog geöffnet");
+        }
+    }
+    
     public void clearNewNet(){
         newNet = null;
         System.out.println("newNet null gesetzt");
@@ -136,6 +154,14 @@ public class HomeController implements Serializable {
         if(selectedNet != null){
             selectedNet.setStatus(Status.RECOVERED);
             selectedNet.setRecoveredBy(loginController.getCurrentUser());
+            app.saveNet(selectedNet);
+            selectedNet = new GhostNet();
+        }
+    }
+    
+    public void handleConfirmedLostNetDialog(){
+        if(selectedNet != null){
+            selectedNet.setStatus(Status.LOST);
             app.saveNet(selectedNet);
             selectedNet = new GhostNet();
         }
