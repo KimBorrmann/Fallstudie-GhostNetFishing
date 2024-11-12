@@ -4,7 +4,6 @@
  */
 package com.kim.fallstudie.ghostnetfishing.dataaccessobjects;
 
-import com.kim.fallstudie.ghostnetfishing.managedbean.GhostNet;
 import com.kim.fallstudie.ghostnetfishing.managedbean.RegisteredUser;
 import com.kim.fallstudie.ghostnetfishing.models.User;
 import jakarta.persistence.EntityManager;
